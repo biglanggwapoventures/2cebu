@@ -23,12 +23,7 @@
         </div>
     </div>
     <div class="container">
-        <div class="row">
-            <div class="col">
-
-            </div>
-        </div>
-        <div class="row mt-2">
+        <div class="row pt-3 bg-primary pb-3 rounded-bottom">
             <div class="col">
                 <form>
                 {!! Form::text('search', null, ['class' => 'form-control w-100', 'placeholder' => 'What are you looking for?']) !!}
@@ -50,6 +45,26 @@
                 </form>
             </div>
         </div>
+        <h3 class="mt-4 mb-4 text-center"><i class="fas fa-star"></i> Most Popular Spots</h4>
+         @foreach($data->chunk(3) as $chunk)
+            <div class="row">
+                @foreach($chunk as $item)
+                    <div class="col-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $item->name }}</h5>
+                                <p class="card-text">{{ $item->location }}</p>
+                            </div>
+                            <div style="height:200px;background:url({{$item->photos[0]->filepath}}) center center;background-size: cover" alt="{{ $item->name }}"></div>
+                            <div class="card-body">
+                                <a href="#" class="card-link text-dark"><i class="fas fa-heart"></i> Like</a>
+                                <a href="#" class="card-link"><i class="fas fa-star"></i> 4.5 </a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endforeach
     </div>
 @endsection
 

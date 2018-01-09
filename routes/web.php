@@ -1,6 +1,6 @@
 <?php
 
-Route::view('/', 'welcome');
+Route::get('/', 'HomeController');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin'], function () {
     Route::redirect('/', 'admin/user');
