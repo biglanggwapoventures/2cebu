@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Attraction;
+use App\Helpers\MyHelper;
 use Illuminate\Database\Eloquent\Model;
 
 class Photo extends Model
@@ -12,6 +13,15 @@ class Photo extends Model
         'caption',
         'filename',
     ];
+
+    protected $appends = [
+        'filepath',
+    ];
+
+    public function getFilepathAttribute()
+    {
+        return $this->filename ? asset("storage/{$this->filename}") : MyHelper::photoPlaceholder();
+    }
 
     public function attraction()
     {

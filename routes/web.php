@@ -11,5 +11,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin'], fu
         Route::patch('transportation', 'TransportationController@update')->name('transportation.update');
         Route::patch('delicacy', 'DelicacyController@update')->name('delicacy.update');
         Route::patch('activity', 'ActivityController@update')->name('activity.update');
+        Route::patch('photo', 'PhotoController@update')->name('photo.update');
     });
 });

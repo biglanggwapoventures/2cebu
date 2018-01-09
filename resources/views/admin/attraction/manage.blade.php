@@ -41,6 +41,9 @@
   <li>
     <a class="nav-link {{ $linkDisabled }}" id="delicacies-tab" data-toggle="tab" href="#delicacies" role="tab" aria-controls="delicacies">Delicacies</a>
   </li>
+  <li>
+    <a class="nav-link {{ $linkDisabled }}" id="photos-tab" data-toggle="tab" href="#photos" role="tab" aria-controls="photos">Photos</a>
+  </li>
 </ul>
 <div class="tab-content mt-3" id="myTabContent">
   <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
@@ -60,7 +63,13 @@
                 {!! Form::hidden('longitude') !!}
                 {!! Form::hidden('latitude') !!}
                 {!! Form::bsSelect('categories[]', 'Category', $categoryList, null, ['class' => 'custom-select category ', 'multiple' => true]) !!}
+                @if($errors->has('categories'))
+                    <small class="text-danger">{{ $errors->first('categories') }}</small>
+                @endif
                 {!! Form::bsSelect('tags[]', 'Tags', $tagList, is_null($resourceData->id) ? [] : $resourceData->tags->pluck('description'), ['class' => 'custom-select tags', 'multiple' => true]) !!}
+                @if($errors->has('tags'))
+                    <small class="bg-red text-white">{{ $errors->first('tags') }}</small>
+                @endif
                 <div class="row">
                     <div class="col-3">
                         {!! Form::bsSelect('attraction_status', 'Set status', ['pending' => 'Pending', 'approved' => 'Approved', 'rejected' => 'Rejected']) !!}
@@ -228,6 +237,29 @@
         <button type="submit" class="btn btn-success">Save</button>
         {!! Form::close() !!}
     </div>
+    <div class="tab-pane" id="photos" role="tabpanel" aria-labelledby="photos-tab">
+        @if(!is_null($resourceData->id))
+        {!! Form::open(['url' => route('admin.attraction.photo.update', ['attraction' => $resourceData->id]), 'method' => 'PATCH', 'class' => 'ajax']) !!}
+        @endif
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> The first photo will be used as the attraction thumbnail.
+            </div>
+            <div class="row">
+                @foreach($resourceData->photos AS $photo)
+                <div class="col text-center">
+                    <img src="{{ $photo->filepath }}" alt="..." class="img-thumbnail photo-upload-placeholder w-100" data-idx="{{ $loop->index }}">
+                    {!! Form::file("photos[{$loop->index}][file]", ['id' => "photo-{$loop->index}", 'data-idx' =>  $loop->index, 'class' => 'd-none photo-input']) !!}
+                    @if(!is_null($photo->id))
+                        {!! Form::hidden("photos[{$loop->index}][id]", $photo->id, ['class' => 'photo-id', 'data-idx' => $loop->index]) !!}
+                        <button class="btn btn-danger remove-photo mt-2 btn-sm" data-idx="{{ $loop->index }}"><i class="fas fa-times"></i> Remove</button>
+                    @endif
+                </div>
+                @endforeach
+            </div>
+        <hr>
+        <button type="submit" class="btn btn-success">Save</button>
+        {!! Form::close() !!}
+    </div>
 </div>
 @endsection
 
@@ -235,6 +267,8 @@
 <script type="text/javascript" src="{{ asset('js/select2.full.min.js') }}"></script>
 <script type="text/javascript">
     jQuery(document).ready(function($) {
+
+        var defaultImage = "{{ MyHelper::photoPlaceholder() }}"
         //prelaod map location on edit
 
         $('.category').select2({
@@ -246,6 +280,25 @@
             tags:true,
             allowClear:true
         });
+
+        $('.photo-upload-placeholder').click(function () {
+            var $this = $(this);
+            $('#photo-'+$this.data('idx')).trigger('click');
+        });
+        $('.photo-input').change(function () {
+            var $this = $(this);
+            $('img[data-idx='+$this.data('idx')+']').attr('src', window.URL.createObjectURL($this[0].files[0]))
+            $('input[data-idx='+$this.data('idx')+'].photo-id').remove();
+        })
+
+        $('.remove-photo').click(function () {
+            if(!confirm('Are you sure?')) return;
+            var $this = $(this);
+
+            $('input[data-idx='+$this.data('idx')+'].photo-id').remove();
+            $('img[data-idx='+$this.data('idx')+']').attr('src', defaultImage)
+            $this.remove();
+        })
     });
 </script>
 <script>

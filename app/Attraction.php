@@ -6,6 +6,7 @@ use App\Accomodation;
 use App\Activity;
 use App\AttractionCategory;
 use App\Delicacy;
+use App\Photo;
 use App\Tag;
 use App\Transportation;
 use Illuminate\Database\Eloquent\Model;
@@ -53,8 +54,14 @@ class Attraction extends Model
         return $this->hasMany(Activity::class);
     }
 
+    public function photos()
+    {
+        return $this->hasMany(Photo::class)
+            ->orderBy('id');
+    }
+
     public function scopeFieldsForMasterList($query)
     {
-        return $query;
+        return $query->orderBy('id', 'desc')->with('categories');
     }
 }

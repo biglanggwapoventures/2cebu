@@ -8,6 +8,7 @@ use App\Attraction;
 use App\AttractionCategory;
 use App\Delicacy;
 use App\Http\Controllers\CRUDController;
+use App\Photo;
 use App\Tag;
 use App\Transportation;
 use Illuminate\Http\Request;
@@ -27,8 +28,8 @@ class AttractionController extends CRUDController
                 'latitude' => ['required', 'numeric'],
                 'longitude' => ['required', 'numeric'],
                 'festivities' => ['present'],
-                'attraction_status' => ['required', Rule::in(['pending', 'approved', 'rejected'])],
-                'status_remarks' => ['sometines'],
+                // 'attraction_status' => ['required', Rule::in(['pending', 'approved', 'rejected'])],
+                'status_remarks' => ['sometimes'],
                 'categories' => ['required', 'array'],
                 'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
                 'tags' => ['present', 'nullable', 'array'],
@@ -40,8 +41,8 @@ class AttractionController extends CRUDController
                 'latitude' => ['required', 'numeric'],
                 'longitude' => ['required', 'numeric'],
                 'festivities' => ['present'],
-                'attraction_status' => ['required', Rule::in(['pending', 'approved', 'rejected'])],
-                'status_remarks' => ['sometines'],
+                // 'attraction_status' => ['required', Rule::in(['pending', 'approved', 'rejected'])],
+                'status_remarks' => ['sometimes'],
                 'categories' => ['required', 'array'],
                 'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
                 'tags' => ['present', 'nullable', 'array'],
@@ -62,6 +63,9 @@ class AttractionController extends CRUDController
         $model->transportations = $model->transportations->isEmpty() ? collect([new Transportation]) : $model->transportations;
         $model->delicacies = $model->delicacies->isEmpty() ? collect([new Delicacy]) : $model->delicacies;
         $model->activities = $model->activities->isEmpty() ? collect([new Activity]) : $model->activities;
+        if ($model->photos->count() < 5) {
+            $model->photos = $model->photos->pad(5, new Photo());
+        }
         $this->beforeCreate();
     }
 
@@ -83,5 +87,15 @@ class AttractionController extends CRUDController
             return $tag->id;
         });
         $attraction->tags()->sync($tags);
+    }
+
+    public function beforeStore()
+    {
+        $this->validationInput['attraction_status'] = 'approved';
+    }
+
+    public function beforeUpdate()
+    {
+        $this->validationInput['attraction_status'] = 'approved';
     }
 }

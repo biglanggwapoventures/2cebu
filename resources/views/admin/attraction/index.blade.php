@@ -4,14 +4,18 @@
 <table class="table table-striped">
     <thead class="thead-dark">
         <tr>
-            <th>Description</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Category</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @forelse($resourceList as $row)
         <tr>
-            <td>{{ $row->description }}</td>
+            <td>{{ $row->name }}</td>
+            <td>{{ $row->location }}</td>
+            <td>{{ $row->categories->implode('description', ', ') }}</td>
             <td>
                 @include('components.form.index-actions', ['id' => $row->id])
             </td>
