@@ -22,7 +22,7 @@
         </tr>
         @empty
         <tr>
-            <td colspan="2" class="text-danger text-center">Emtpty table</td>
+            <td colspan="4" class="text-danger text-center">Emtpty table</td>
         </tr>
         @endforelse
     </tbody>

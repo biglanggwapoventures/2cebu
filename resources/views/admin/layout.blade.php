@@ -29,23 +29,10 @@
         <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
           <ul class="nav nav-pills flex-column">
             <li class="nav-item">
-              <a class="nav-link {{ Route::is('admin.user.index') ? 'active' : '' }}" href="{{ route('admin.user.index') }}">Users <span class="sr-only">(current)</span></a>
+              <a class="nav-link {{ Route::is('admin.user.index') ? 'active' : '' }}" href="{{ route('admin.user.index') }}">Users </span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {{ Route::is('admin.attraction.index') ? 'active' : '' }}" href="{{ route('admin.attraction.index') }}">Attraction</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Local Delicacies</a>
-
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Transportation</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Accomodations</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Review and Ratings</a>
+              <a class="nav-link {{ Route::is('admin.attraction.index') ? 'active' : '' }}" href="{{ route('admin.attraction.index') }}">Attractions</a>
             </li>
           </ul>
            <ul class="nav nav-pills flex-column">

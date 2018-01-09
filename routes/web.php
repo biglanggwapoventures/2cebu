@@ -3,6 +3,7 @@
 Route::view('/', 'welcome');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin'], function () {
+    Route::redirect('/', 'admin/user');
     Route::resource('user', 'UserController');
     Route::resource('attraction-category', 'AttractionCategoryController');
     Route::resource('attraction', 'AttractionController');

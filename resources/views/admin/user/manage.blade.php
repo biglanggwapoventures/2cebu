@@ -11,6 +11,7 @@
 <div class="row">
     <div class="col-4">
         {!! Form::bsText('email', 'Email Address') !!}
+        {!! Form::bsText('username', 'Username') !!}
         <div class="row">
             <div class="col">
                 {!! Form::bsPassword('password', 'Desired Password') !!}

@@ -23,6 +23,7 @@ class UserController extends CRUDController
                 'password' => 'required|min:6',
                 'password_confirmation' => 'required|same:password',
                 'email' => ['required', 'email', Rule::unique($model->getTable())],
+                'username' => ['required', Rule::unique($model->getTable())],
             ],
             'update' => [
                 'firstname' => ['required'],
@@ -33,6 +34,7 @@ class UserController extends CRUDController
                 'password' => 'present|nullable|min:6',
                 'password_confirmation' => 'present|nullable|same:password',
                 'email' => ['required', 'email', Rule::unique($model->getTable())->ignore($request->route('user'))],
+                'username' => ['required', Rule::unique($model->getTable())->ignore($request->route('user'))],
             ],
         ];
     }

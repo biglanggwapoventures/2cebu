@@ -70,11 +70,6 @@
                 @if($errors->has('tags'))
                     <small class="bg-red text-white">{{ $errors->first('tags') }}</small>
                 @endif
-                <div class="row">
-                    <div class="col-3">
-                        {!! Form::bsSelect('attraction_status', 'Set status', ['pending' => 'Pending', 'approved' => 'Approved', 'rejected' => 'Rejected']) !!}
-                    </div>
-                </div>
             </div>
         </div>
         <hr>
