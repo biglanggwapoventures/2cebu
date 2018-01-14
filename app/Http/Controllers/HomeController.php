@@ -10,7 +10,7 @@ class HomeController extends Controller
     public function __invoke(Request $request)
     {
         return view('welcome', [
-            'data' => Attraction::with(['photos', 'categories', 'tags'])->get(),
+            'data' => Attraction::approved()->with(['photos', 'categories', 'tags'])->get(),
         ]);
     }
 }

@@ -7,12 +7,15 @@
         <title>2Cebu</title>
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/jquery.growl.css') }}">
         @stack('css')
     </head>
     <body>
         @yield('content')
+        @stack('modals')
         <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/jquery.growl.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
         @stack('js')
     </body>

@@ -51,11 +51,11 @@
                 @foreach($chunk as $item)
                     <div class="col-4">
                         <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $item->name }}</h5>
-                                <p class="card-text">{{ $item->location }}</p>
+                            <div class="card-body p-3">
+                                <h5 class="card-title mb-0"><a target="_blank" href="{{ route('user.attraction.show', ['attraction' => $item->id]) }}">{{ $item->name }}</a></h5>
+                                <p class="card-text text-truncate">{{ $item->location }}</p>
                             </div>
-                            <div style="height:200px;background:url({{$item->photos[0]->filepath}}) center center;background-size: cover" alt="{{ $item->name }}"></div>
+                            <div style="height:200px;background:url('{{$item->thumbnail? $item->thumbnail->filepath : MyHelper::photoPlaceholder()}}') center center;background-size: cover" alt="{{ $item->name }}"></div>
                             <div class="card-body">
                                 <a href="#" class="card-link text-dark"><i class="fas fa-heart"></i> Like</a>
                                 <a href="#" class="card-link"><i class="fas fa-star"></i> 4.5 </a>

@@ -57,9 +57,10 @@
                 {!! Form::bsText('name', 'Name Of Place') !!}
                 {!! Form::bsTextarea('description', 'Say something about this attraction', null, ['rows' => '3']) !!}
                 {!! Form::bsTextarea('festivities', 'Festivities', null, ['rows' => '3']) !!}
+                {!! Form::bsTextarea('policy', 'Policies', null, ['rows' => '3']) !!}
             </div>
             <div class="col-6">
-                {!! Form::bsText('location', 'Location', null, ['readonly' => 'readonly', 'id' => 'location']) !!}
+                {!! Form::bsText('location', 'Location', null, ['id' => 'location']) !!}
                 {!! Form::hidden('longitude') !!}
                 {!! Form::hidden('latitude') !!}
                 {!! Form::bsSelect('categories[]', 'Category', $categoryList, null, ['class' => 'custom-select category ', 'multiple' => true]) !!}
@@ -69,6 +70,16 @@
                 {!! Form::bsSelect('tags[]', 'Tags', $tagList, is_null($resourceData->id) ? [] : $resourceData->tags->pluck('description'), ['class' => 'custom-select tags', 'multiple' => true]) !!}
                 @if($errors->has('tags'))
                     <small class="bg-red text-white">{{ $errors->first('tags') }}</small>
+                @endif
+                @if($resourceData->isNotOwnedBy(Auth::id()))
+                    <div class="row">
+                        <div class="col-3">
+                            {!! Form::bsSelect('attraction_status', 'Status', ['pending' => 'Pending', 'approved' => 'Approved', 'rejected' => 'Rejected'], null, ['class' => 'custom-select ']) !!}
+                        </div>
+                        <div class="col">
+                            {!! Form::bsText('status_remarks', 'Status Remarks') !!}
+                        </div>
+                    </div>
                 @endif
             </div>
         </div>

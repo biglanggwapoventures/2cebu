@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\User;
 
 use App\Accomodation;
 use App\Activity;
@@ -11,13 +11,18 @@ use App\Http\Controllers\CRUDController;
 use App\Photo;
 use App\Tag;
 use App\Transportation;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class AttractionController extends CRUDController
 {
-    public function __construct(Attraction $model, Request $request, AttractionCategory $category, Tag $tag)
-    {
+    public function __construct(
+        Attraction $model,
+        Request $request,
+        AttractionCategory $category,
+        Tag $tag
+    ) {
         parent::__construct();
         $this->resourceModel = $model;
         $this->validationRules = [
@@ -29,7 +34,7 @@ class AttractionController extends CRUDController
                 'longitude' => ['required', 'numeric'],
                 'festivities' => ['present'],
                 'policy' => ['present'],
-                'attraction_status' => ['sometimes', Rule::in(['pending', 'approved', 'rejected'])],
+                // 'attraction_status' => ['required', Rule::in(['pending', 'approved', 'rejected'])],
                 'status_remarks' => ['sometimes'],
                 'categories' => ['required', 'array'],
                 'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
@@ -43,7 +48,7 @@ class AttractionController extends CRUDController
                 'longitude' => ['required', 'numeric'],
                 'festivities' => ['present'],
                 'policy' => ['present'],
-                'attraction_status' => ['sometimes', Rule::in(['pending', 'approved', 'rejected'])],
+                // 'attraction_status' => ['required', Rule::in(['pending', 'approved', 'rejected'])],
                 'status_remarks' => ['sometimes'],
                 'categories' => ['required', 'array'],
                 'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
@@ -54,7 +59,7 @@ class AttractionController extends CRUDController
 
     public function beforeIndex($query)
     {
-        $query->with('owner');
+        $query->ownedBy(Auth::id())->with('photos');
     }
 
     public function beforeCreate()
@@ -80,6 +85,12 @@ class AttractionController extends CRUDController
         $model->photos->when($model->photos->count() < 5, function ($photos) use ($model) {
             $model->photos = $photos->pad(5, new Photo);
         });
+
+        $reviewStatus = in_array(request()->review_status, ['pending', 'approved', 'rejected']) ? request()->review_status : 'pending';
+        // dd($reviewStatus);
+        $model->load(['reviews' => function ($query) use ($reviewStatus) {
+            return $query->with('owner')->whereRatingStatus($reviewStatus);
+        }]);
         $this->beforeCreate();
     }
 
@@ -105,6 +116,15 @@ class AttractionController extends CRUDController
 
     public function beforeStore()
     {
-        $this->validatedInput['attraction_status'] = 'approved';
+        $this->validatedInput['user_id'] = Auth::id();
+        $this->validatedInput['attraction_status'] = 'pending';
+    }
+
+    public function beforeShow($attraction)
+    {
+        $attraction->load(['accomodations', 'activities', 'transportations', 'delicacies', 'owner', 'tags', 'photos', 'approvedReviews.owner']);
+        $attraction->photos->when($attraction->photos->count() < 5, function ($photos) use ($attraction) {
+            $attraction->photos = $photos->pad(5, new Photo);
+        });
     }
 }

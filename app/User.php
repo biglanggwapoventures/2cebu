@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Hash;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -52,6 +53,11 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return "{$this->firstname} {$this->lastname}";
+    }
+
+    public function setPasswordAttribute($val)
+    {
+        $this->attributes['password'] = Hash::make($val);
     }
 
     public function getRegistrationMethodAttribute()
