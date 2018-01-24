@@ -56,7 +56,7 @@ class AttractionController extends CRUDController
                 'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
                 'tags' => ['present', 'nullable', 'array'],
                 'is_featured' => 'boolean',
-                'feature_banner' => 'required_if:is_featured,1|image',
+                'feature_banner' => 'image',
             ],
         ];
     }
@@ -133,6 +133,8 @@ class AttractionController extends CRUDController
 
     public function beforeUpdate()
     {
-        $this->validatedInput['feature_banner'] = $this->storeFeatureBanner();
+        if (is_null($this->storeFeatureBanner())) {
+            unset($this->validatedInput['feature_banner']);
+        }
     }
 }
