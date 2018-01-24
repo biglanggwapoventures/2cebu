@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Session;
 
 class PhotoController extends Controller
 {
@@ -42,6 +43,8 @@ class PhotoController extends Controller
         if (!empty($new)) {
             $attraction->photos()->createMany($new);
         }
+
+        Session::flash('growl', 'Photos successfully updated');
 
         return response()->json([
             'result' => true,

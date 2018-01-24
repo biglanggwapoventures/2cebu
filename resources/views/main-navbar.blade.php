@@ -84,7 +84,7 @@
                     {!! Form::bsSelect('gender', 'Gender', ['' => '', 'male' => 'Male', 'female' => 'Female'], null, ['class' => 'form-control form-control-sm']) !!}
                 </div>
                 <div class="col">
-                    {!! Form::bsText('contact_number', 'Contact Number', null, ['class' => 'form-control form-control-sm']) !!}
+                    {!! Form::bsText('contact_number', 'Contact Number', null, ['class' => 'form-control form-control-sm', 'placeholder' => 'eg. 09233887588']) !!}
                 </div>
             </div>
 
@@ -117,10 +117,10 @@
                 </div>
                 {!! Form::open(['url' => route('guest.login'), 'method' => 'POST','class' => 'ajax']) !!}
                     <div class="modal-body">
-                        {!! Form::bsText('username', 'Your username') !!}
-                        {!! Form::bsPassword('password', 'Then your password') !!}
+                        {!! Form::bsText('username', 'Username') !!}
+                        {!! Form::bsPassword('password', 'Password') !!}
                         <div class="text-center">
-                          <button type="submit" class="btn-block btn btn-success">Log me in!</button>
+                          <button type="submit" class="btn-block btn btn-success">Log in</button>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">

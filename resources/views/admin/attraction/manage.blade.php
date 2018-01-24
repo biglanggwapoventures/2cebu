@@ -50,7 +50,7 @@
     @if(is_null($resourceData->id))
     {!! Form::open(['url' => MyHelper::resource('store'), 'method' => 'POST', 'class' => 'ajax']) !!}
     @else
-    {!! Form::model($resourceData, ['url' => MyHelper::resource('update', ['id' => $resourceData->id]), 'method' => 'PATCH']) !!}
+    {!! Form::model($resourceData, ['url' => MyHelper::resource('update', ['id' => $resourceData->id]), 'method' => 'PATCH', 'class' => 'ajax']) !!}
     @endif
         <div class="row">
             <div class="col-6">
@@ -71,6 +71,14 @@
                 @if($errors->has('tags'))
                     <small class="bg-red text-white">{{ $errors->first('tags') }}</small>
                 @endif
+                <div class="row">
+                    <div class="col-sm-6">
+                        {!! Form::bsNumber('budget_range_min', 'Budget Range (Min)') !!}
+                    </div>
+                    <div class="col-sm-6">
+                        {!! Form::bsNumber('budget_range_max', 'Budget Range (Max)') !!}
+                    </div>
+                </div>
                 @if($resourceData->isNotOwnedBy(Auth::id()))
                     <div class="row">
                         <div class="col-3">

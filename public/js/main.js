@@ -1,4 +1,9 @@
 jQuery(document).ready(function($) {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     $('.modal').on('show.bs.modal', function() {
         var form = $(this).find('form');
         form[0].reset();
@@ -25,8 +30,8 @@ jQuery(document).ready(function($) {
             contentType: false,
             processData: false,
             success: function(res) {
-                if(res.hasOwnProperty('next_url')){
-                    window.location.href = res.next_url;
+                if(res.hasOwnProperty('data') && res.data.hasOwnProperty('location')){
+                    window.location.href = res.data.location;
                 }else if($this.data('next-url')){
                     window.location.href = $this.data('next-url');
                 }else{
@@ -101,14 +106,8 @@ jQuery(document).ready(function($) {
         $(this).closest('tr').remove();
     });
 
-    // store the currently selected tab in the hash value
-    $("ul:not(.no-hash).nav-tabs > li > a").on("shown.bs.tab", function(e) {
-      var id = $(e.target).attr("href").substr(1);
-      window.location.hash = id;
-    });
 
-    // on load of the page: switch to the currently selected tab
-    var hash = window.location.hash;
-    $('#myTab a[href="' + hash + '"]').tab('show');
+
+
 
 });

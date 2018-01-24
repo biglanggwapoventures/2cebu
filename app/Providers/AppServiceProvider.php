@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Form::component('bsText', 'components.form.text', ['name', 'label' => null, 'value' => null, 'attributes' => []]);
+        Form::component('bsNumber', 'components.form.number', ['name', 'label' => null, 'value' => null, 'attributes' => []]);
         Form::component('bsFile', 'components.form.file', ['name', 'label' => null, 'attributes' => []]);
         Form::component('bsTextarea', 'components.form.textarea', ['name', 'label' => null, 'value' => null, 'attributes' => []]);
         Form::component('bsPassword', 'components.form.password', ['name', 'label' => null, 'attributes' => []]);

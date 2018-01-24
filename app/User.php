@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Attraction;
+use App\Rating;
 use Hash;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -67,5 +69,15 @@ class User extends Authenticatable
         }
 
         return is_null($this->facebook_uid) ? 'Google' : 'Facebook';
+    }
+
+    public function likedAttractions()
+    {
+        return $this->belongsToMany(Attraction::class, 'attraction_like', 'user_id', 'attraction_id')->select('attractions.id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Rating::class);
     }
 }

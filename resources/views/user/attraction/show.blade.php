@@ -45,12 +45,14 @@
                     <small>
                         {{ $resourceData->location }}  <br>
                         <small>
-                            Rating: <span class="badge badge-success badge-pill">{{ $resourceData->approvedReviews->avg('rating') }} / 5 <i class="fas fa-star"></i></span></small>
+                            Rating: <span class="badge badge-success badge-pill">{{ $resourceData->average_rating }} / 5 <i class="fas fa-star"></i></span></small>
                     </small>
                 </h3>
                 <dl class="row">
                     <dt class="col-sm-3">Category</dt>
                     <dd class="col-sm-9 mb-0">{{ $resourceData->categories->implode('description', ', ') }}</dd>
+                    <dt class="col-sm-3">Budget Range</dt>
+                    <dd class="col-sm-9 mb-0">{{ number_format($resourceData->budget_range_min, 2) }} to {{ number_format($resourceData->budget_range_max, 2) }} php</dd>
                     <dt class="col-sm-3">Tags</dt>
                     <dd class="col-sm-9 mb-0">{{ $resourceData->tags->implode('description', ', ') }}</dd>
                     <dt class="col-sm-3">Published by</dt>
@@ -105,10 +107,10 @@
                         <table class="table table-sm">
                             <thead>
                                 <tr>
-                                    <th>Description</th>
-                                    <th>Minimum Rate</th>
-                                    <th>Max Rate</th>
-                                    <th>Remarks</th>
+                                    <th class="bg-success text-white">Description</th>
+                                    <th class="bg-success text-white">Minimum Rate</th>
+                                    <th class="bg-success text-white">Max Rate</th>
+                                    <th class="bg-success text-white">Additional Information</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -131,11 +133,11 @@
                         <table class="table table-sm">
                             <thead>
                                 <tr>
-                                    <th>Description</th>
-                                    <th>Start Point</th>
-                                    <th>End Point</th>
-                                    <th>Cost</th>
-                                    <th></th>
+                                    <th class="bg-success text-white">Vehicle</th>
+                                    <th class="bg-success text-white">Start Point</th>
+                                    <th class="bg-success text-white">End Point</th>
+                                    <th class="bg-success text-white">Cost</th>
+                                    <th class="bg-success text-white"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -158,9 +160,9 @@
                         <table class="table table-sm">
                             <thead>
                                 <tr>
-                                    <th>Description</th>
-                                    <th>Cost</th>
-                                    <th>Remarks</th>
+                                    <th class="bg-success text-white">Type of Activity</th>
+                                    <th class="bg-success text-white">Cost</th>
+                                    <th class="bg-success text-white">Remarks</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -182,9 +184,9 @@
                         <table class="table table-sm">
                             <thead>
                                 <tr>
-                                    <th>Description</th>
-                                    <th>Cost</th>
-                                    <th>Remarks</th>
+                                    <th class="bg-success text-white">Name</th>
+                                    <th class="bg-success text-white">Cost</th>
+                                    <th class="bg-success text-white">Description</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -6,6 +6,7 @@ use App\Http\Controllers\CRUDController;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Session;
 
 class UserController extends CRUDController
 {
@@ -44,5 +45,15 @@ class UserController extends CRUDController
         if (!trim(request()->password)) {
             unset($this->validatedInput['password']);
         }
+    }
+
+    public function afterStore($model)
+    {
+        Session::flash('growl', 'New user has been added.');
+    }
+
+    public function afterUpdate($model)
+    {
+        Session::flash('growl', 'User has been updated.');
     }
 }

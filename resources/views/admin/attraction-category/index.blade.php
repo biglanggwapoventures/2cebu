@@ -4,10 +4,10 @@
 <div class="row">
     <div class="col-6">
         <table class="table table-striped">
-            <thead class="thead-dark">
+            <thead>
                 <tr>
-                    <th>Description</th>
-                    <th></th>
+                    <th class="bg-success text-white">Description</th>
+                    <th class="row-actions bg-success text-white"></th>
                 </tr>
             </thead>
             <tbody>

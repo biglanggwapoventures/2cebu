@@ -13,6 +13,7 @@ use App\Tag;
 use App\Transportation;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Session;
 
 class AttractionController extends CRUDController
 {
@@ -28,6 +29,8 @@ class AttractionController extends CRUDController
                 'latitude' => ['required', 'numeric'],
                 'longitude' => ['required', 'numeric'],
                 'festivities' => ['present'],
+                'budget_range_min' => ['required', 'numeric'],
+                'budget_range_max' => ['required', 'numeric'],
                 'policy' => ['present'],
                 'attraction_status' => ['sometimes', Rule::in(['pending', 'approved', 'rejected'])],
                 'status_remarks' => ['sometimes'],
@@ -42,6 +45,8 @@ class AttractionController extends CRUDController
                 'latitude' => ['required', 'numeric'],
                 'longitude' => ['required', 'numeric'],
                 'festivities' => ['present'],
+                'budget_range_min' => ['required', 'numeric'],
+                'budget_range_max' => ['required', 'numeric'],
                 'policy' => ['present'],
                 'attraction_status' => ['sometimes', Rule::in(['pending', 'approved', 'rejected'])],
                 'status_remarks' => ['sometimes'],
@@ -91,6 +96,7 @@ class AttractionController extends CRUDController
             return $tag->id;
         });
         $attraction->tags()->attach($tags);
+        Session::flash('growl', 'Attraction successfully added. You can now manage the accomodations, transportation and more details.');
     }
 
     public function afterUpdate($attraction)
@@ -101,6 +107,7 @@ class AttractionController extends CRUDController
             return $tag->id;
         });
         $attraction->tags()->sync($tags);
+        Session::flash('growl', 'Attraction successfully updated');
     }
 
     public function beforeStore()

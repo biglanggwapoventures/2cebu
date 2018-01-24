@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Attraction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Session;
 
 class DelicacyController extends Controller
 {
@@ -43,6 +44,8 @@ class DelicacyController extends Controller
         if (!empty($new)) {
             $attraction->delicacies()->createMany($new);
         }
+
+        Session::flash('growl', 'Delicacies successfully updated');
 
         return response()->json([
             'result' => true,

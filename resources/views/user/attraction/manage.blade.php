@@ -66,23 +66,25 @@
                     @if(is_null($resourceData->id))
                     {!! Form::open(['url' => MyHelper::resource('store'), 'method' => 'POST', 'class' => 'ajax']) !!}
                     @else
-                    {!! Form::model($resourceData, ['url' => MyHelper::resource('update', ['id' => $resourceData->id]), 'method' => 'PATCH']) !!}
+                    {!! Form::model($resourceData, ['url' => MyHelper::resource('update', ['id' => $resourceData->id]), 'method' => 'PATCH', 'class' => 'ajax']) !!}
                     @endif
                         <!-- <div class="row"> -->
                             {!! Form::bsText('name', 'Name Of Place') !!}
                             {!! Form::bsText('location', 'Location', null, ['id' => 'location']) !!}
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-sm-7">
                                     {!! Form::bsSelect('categories[]', 'Category', $categoryList, null, ['class' => 'custom-select category  w-10 ', 'multiple' => true]) !!}
                                     @if($errors->has('categories'))
                                         <small class="text-danger">{{ $errors->first('categories') }}</small>
                                     @endif
-                                </div>
-                                <div class="col-6">
                                     {!! Form::bsSelect('tags[]', 'Tags', $tagList, is_null($resourceData->id) ? [] : $resourceData->tags->pluck('description'), ['class' => 'custom-select tags w-100', 'multiple' => true]) !!}
                                     @if($errors->has('tags'))
                                         <small class="bg-red text-white">{{ $errors->first('tags') }}</small>
                                     @endif
+                                </div>
+                                <div class="col-sm-5">
+                                    {!! Form::bsNumber('budget_range_min', 'Budget Range (Min)') !!}
+                                    {!! Form::bsNumber('budget_range_max', 'Budget Range (Max)') !!}
                                 </div>
                             </div>
                             {!! Form::bsTextarea('description', 'Description', null, ['rows' => '3']) !!}
@@ -101,11 +103,11 @@
                         <table class="table dynamic">
                             <thead>
                                 <tr>
-                                    <th>Description</th>
-                                    <th>Minimum Rate</th>
-                                    <th>Max Rate</th>
-                                    <th>Remarks</th>
-                                    <th></th>
+                                    <th class="bg-success text-white">Description</th>
+                                    <th class="bg-success text-white">Minimum Rate</th>
+                                    <th class="bg-success text-white">Max Rate</th>
+                                    <th class="bg-success text-white">Additional Information</th>
+                                    <th class="bg-success text-white"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -141,11 +143,11 @@
                         <table class="table dynamic">
                             <thead>
                                 <tr>
-                                    <th>Description</th>
-                                    <th>Start Point</th>
-                                    <th>End Point</th>
-                                    <th>Cost</th>
-                                    <th></th>
+                                    <th class="bg-success text-white">Vehicle</th>
+                                    <th class="bg-success text-white">Start Point</th>
+                                    <th class="bg-success text-white">End Point</th>
+                                    <th class="bg-success text-white">Cost</th>
+                                    <th class="bg-success text-white"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -181,10 +183,10 @@
                         <table class="table dynamic">
                             <thead>
                                 <tr>
-                                    <th>Description</th>
-                                    <th>Cost</th>
-                                    <th>Remarks</th>
-                                    <th></th>
+                                    <th class="bg-success text-white">Type of Activity</th>
+                                    <th class="bg-success text-white">Cost</th>
+                                    <th class="bg-success text-white">Remarks</th>
+                                    <th class="bg-success text-white"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -219,10 +221,10 @@
                         <table class="table dynamic">
                             <thead>
                                 <tr>
-                                    <th>Description</th>
-                                    <th>Cost</th>
-                                    <th>Remarks</th>
-                                    <th></th>
+                                    <th class="bg-success text-white">Name</th>
+                                    <th class="bg-success text-white">Cost</th>
+                                    <th class="bg-success text-white">Description</th>
+                                    <th class="bg-success text-white"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -284,11 +286,11 @@
                         <table class="mt-2 table-sm table" >
                             <thead>
                                 <tr>
-                                    <th>Owner</th>
-                                    <th>Rating</th>
-                                    <th>Review</th>
-                                    <th>Date Submitted</th>
-                                    <th></th>
+                                    <th class="bg-success text-white">Owner</th>
+                                    <th class="bg-success text-white">Rating</th>
+                                    <th class="bg-success text-white">Review</th>
+                                    <th class="bg-success text-white">Date Submitted</th>
+                                    <th class="bg-success text-white"></th>
                                 </tr>
                             </thead>
                             <tbody>

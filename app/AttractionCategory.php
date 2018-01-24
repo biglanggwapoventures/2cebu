@@ -20,4 +20,9 @@ class AttractionCategory extends Model
     {
         return $this->belongsToMany(Attraction::class, 'attraction_category', 'category_id', 'attraction_id');
     }
+
+    public function scopeDropdownFormat()
+    {
+        return $this->get()->pluck('description', 'id')->prepend('** ALL CATEGORIES ** ', '');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Attraction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Session;
 
 class ActivityController extends Controller
 {
@@ -44,6 +45,7 @@ class ActivityController extends Controller
             $attraction->activities()->createMany($new);
         }
 
+        Session::flash('growl', 'Activities successfully updated');
         return response()->json([
             'result' => true,
         ]);

@@ -6,6 +6,7 @@ use App\AttractionCategory;
 use App\Http\Controllers\CRUDController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Session;
 
 class AttractionCategoryController extends CRUDController
 {
@@ -21,5 +22,15 @@ class AttractionCategoryController extends CRUDController
                 'description' => ['required', Rule::unique($model->getTable())->ignore($request->route('attraction_category'))],
             ],
         ];
+    }
+
+    public function afterStore($model)
+    {
+        Session::flash('growl', 'A new category has been added.');
+    }
+
+    public function afterUpdate($model)
+    {
+        Session::flash('growl', 'Category successfully updated.');
     }
 }

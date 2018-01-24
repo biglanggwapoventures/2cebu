@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Attraction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Session;
 
 class AccomodationController extends Controller
 {
@@ -45,6 +46,8 @@ class AccomodationController extends Controller
         if (!empty($new)) {
             $attraction->accomodations()->createMany($new);
         }
+
+        Session::flash('growl', 'Accomodation successfully updated');
 
         return response()->json([
             'result' => true,

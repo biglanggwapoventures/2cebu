@@ -2,14 +2,14 @@
 @section('title', 'Attractions')
 @section('body')
 <table class="table table-striped">
-    <thead class="thead-dark">
+    <thead>
         <tr>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Category</th>
-            <th>Submitted by<br>Submited on</th>
-            <th>Status</th>
-            <th></th>
+            <th class="bg-success text-white">Name</th>
+            <th class="bg-success text-white">Location</th>
+            <th class="bg-success text-white">Category</th>
+            <th class="bg-success text-white">Submitted by<br>Submited on</th>
+            <th class="bg-success text-white">Status</th>
+            <th class="row-actions bg-success text-white"></th>
         </tr>
     </thead>
     <tbody>

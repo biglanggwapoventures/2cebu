@@ -14,6 +14,7 @@ use App\Transportation;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Session;
 
 class AttractionController extends CRUDController
 {
@@ -102,6 +103,7 @@ class AttractionController extends CRUDController
             return $tag->id;
         });
         $attraction->tags()->attach($tags);
+        Session::flash('growl', 'Attraction successfully added. You can now manage the accomodations, transportation and more details.');
     }
 
     public function afterUpdate($attraction)
@@ -112,6 +114,7 @@ class AttractionController extends CRUDController
             return $tag->id;
         });
         $attraction->tags()->sync($tags);
+        Session::flash('growl', 'Attraction successfully updated');
     }
 
     public function beforeStore()

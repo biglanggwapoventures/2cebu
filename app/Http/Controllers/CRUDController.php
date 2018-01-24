@@ -170,7 +170,7 @@ class CRUDController extends Controller
                 'result' => true,
                 'data' => [
                     'id' => $resource->id,
-                    'location' => MyHelper::resource('show', ['id' => $resource->id]),
+                    'location' => MyHelper::resource('edit', ['id' => $resource->id]),
                 ],
             ]);
         }
@@ -258,10 +258,6 @@ class CRUDController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'result' => true,
-                'data' => [
-                    'id' => $resource->id,
-                    'location' => MyHelper::resource('show', ['id' => $resource->id]),
-                ],
             ]);
         }
 
