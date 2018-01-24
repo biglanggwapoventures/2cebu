@@ -282,10 +282,10 @@
 
         var geocoder = new google.maps.Geocoder,
             map = new google.maps.Map(document.getElementById('map'), {
-                mapTypeId: 'satellite',
-                zoom: 19,
+                // mapTypeId: 'satellite',
+                zoom: 12,
                 center: getDefaultMapCenter(),
-                draggable:false
+                // draggable:false
             }),
             marker = new google.maps.Marker({
                 map: map,

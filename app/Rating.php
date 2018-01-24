@@ -37,8 +37,18 @@ class Rating extends Model
         return $this->belongsTo(Attraction::class, 'attraction_id');
     }
 
+    public function scopeApproved($query)
+    {
+        return $this->whereRatingStatus('approved');
+    }
+
     public function is($status)
     {
         return strtolower($status) == $this->rating_status;
+    }
+
+    public function scopeGivenBy($query, $userId)
+    {
+        return $this->whereUserId($userId);
     }
 }

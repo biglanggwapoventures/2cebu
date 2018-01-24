@@ -20,7 +20,7 @@
           <i class="fas fa-user"></i> {{ Auth::user()->fullname }}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Profile</a>
+          <a class="dropdown-item" href="{{ route('user.profile') }}">Profile</a>
            {!! Form::open(['url' => route('logout'), 'method' => 'post', 'class' => 'd-none', 'id' => 'logout-form']) !!}
             {!! Form::close()  !!}
             <a class="dropdown-item logout" href="#">Logout</a>

@@ -19,6 +19,7 @@ Route::group(['as' => 'user.', 'namespace' => 'User', 'middleware' => 'auth', 'p
     Route::post('attraction/{attractionId}/review', 'ReviewController@submitReview')->name('review');
     Route::post('attraction/like', 'LikeAttractionController')->name('attraction.like');
     Route::get('profile', 'ProfileController')->name('profile');
+    Route::patch('profile', 'ProfileController@update')->name('profile.update');
 });
 
 Route::patch('review/{id}/status', 'User\ReviewController@setStatus')->name('review.set-status');

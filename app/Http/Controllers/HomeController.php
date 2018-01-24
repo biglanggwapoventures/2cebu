@@ -12,13 +12,17 @@ class HomeController extends Controller
 {
     public function __invoke(Request $request)
     {
+        $hasPerformedSearch = $this->hasPerformedSearch();
         $top = Attraction::forShowcase()->top(6);
         $newest = Attraction::forShowcase()->newest(6);
 
-        $q = $this->hasPerformedSearch() ? $this->performSearch() : null;
+        $q = $hasPerformedSearch ? $this->performSearch() : null;
+        $featured = $hasPerformedSearch ? collect([]) : Attraction::featured()->get();
 
         return View::make('welcome', [
             'q' => $q,
+            'hasPerformedSearch' => $hasPerformedSearch,
+            'featured' => $featured,
             'newest' => $newest->get(),
             'top' => $top->get()->sortByDesc('average_rating'),
             'provinces' => Province::dropdownFormat(),
@@ -30,7 +34,7 @@ class HomeController extends Controller
     {
         // DB::enableQueryLog();
         $request = request();
-        $attraction = Attraction::query();
+        $attraction = Attraction::approved()->forShowcase();
 
         $attraction->when($request->q, function ($query) use ($request) {
             $query->where(function ($query) use ($request) {
@@ -54,7 +58,7 @@ class HomeController extends Controller
         // $laQuery = DB::getQueryLog();
         // dd($laQuery);
 
-        return $attraction->forShowcase()->paginate(6);
+        return $attraction->paginate(6);
     }
 
     public function hasPerformedSearch()

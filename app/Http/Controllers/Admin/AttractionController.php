@@ -37,6 +37,8 @@ class AttractionController extends CRUDController
                 'categories' => ['required', 'array'],
                 'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
                 'tags' => ['present', 'nullable', 'array'],
+                'is_featured' => 'boolean',
+                'feature_banner' => 'required_if:is_featured,1|image',
             ],
             'update' => [
                 'name' => ['required', Rule::unique($model->getTable())->ignore($request->route('attraction'))],
@@ -53,6 +55,8 @@ class AttractionController extends CRUDController
                 'categories' => ['required', 'array'],
                 'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
                 'tags' => ['present', 'nullable', 'array'],
+                'is_featured' => 'boolean',
+                'feature_banner' => 'required_if:is_featured,1|image',
             ],
         ];
     }
@@ -88,6 +92,16 @@ class AttractionController extends CRUDController
         $this->beforeCreate();
     }
 
+    private function storeFeatureBanner()
+    {
+        if ((int) request()->is_featured && request()->hasFile('feature_banner')) {
+            return request()->file('feature_banner')->store(
+                'photos/feature-banners', 'public'
+            );
+        }
+        return null;
+    }
+
     public function afterStore($attraction)
     {
         $attraction->categories()->attach(request()->categories);
@@ -107,11 +121,18 @@ class AttractionController extends CRUDController
             return $tag->id;
         });
         $attraction->tags()->sync($tags);
+
         Session::flash('growl', 'Attraction successfully updated');
     }
 
     public function beforeStore()
     {
+        $this->validatedInput['feature_banner'] = $this->storeFeatureBanner();
         $this->validatedInput['attraction_status'] = 'approved';
+    }
+
+    public function beforeUpdate()
+    {
+        $this->validatedInput['feature_banner'] = $this->storeFeatureBanner();
     }
 }

@@ -89,6 +89,14 @@
                         </div>
                     </div>
                 @endif
+                <hr>
+                <!-- <div class="bg-info text-white p-2 rounded"> -->
+                    <div class="checkbox">
+                        <label >{!! Form::checkbox('is_featured', 1, $resourceData->is_featured) !!} Mark this attraction as a featured attraction</label>
+                    </div>
+                    {!! Form::bsFile('feature_banner') !!}
+                <!-- </div> -->
+
             </div>
         </div>
         <hr>

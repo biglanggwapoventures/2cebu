@@ -29,10 +29,16 @@ class Attraction extends Model
         'policy',
         'attraction_status',
         'status_remarks',
+        'is_featured',
+        'feature_banner',
     ];
 
     protected $appends = [
         'average_rating',
+    ];
+
+    protected $casts = [
+        'is_featured' => 'boolean',
     ];
 
     public function accomodations()
@@ -187,6 +193,11 @@ class Attraction extends Model
             ->orderBy('average_rating', 'desc')
             ->limit($limit)
             ->get();
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->whereIsFeatured(1);
     }
 
     public function scopeForShowcase($query)
