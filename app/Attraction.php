@@ -200,6 +200,11 @@ class Attraction extends Model
         return $query->whereIsFeatured(1);
     }
 
+    public function getFeatureBannerAttribute($value)
+    {
+        return $value ? asset("storage/{$value}") : null;
+    }
+
     public function scopeForShowcase($query)
     {
         return $query->with([
