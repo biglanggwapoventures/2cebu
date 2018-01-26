@@ -2,69 +2,7 @@
 
 @push('css')
 <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
-<style>
-   #map {
-    height: 500px;
-    width: 100%;
-   }
-   .table .form-group{
-    margin-bottom:0;
-   }
-   html{
-    padding-bottom:50px;
-    padding-top: 50px;
-   }
-   a.action:hover {
-    text-decoration: none;
-   }
-   form.flat input,select{
-        border-radius: 0!important;
-        box-shadow: none;
-   }
-   form.flat .form-group{
-    margin-bottom: 5px;
-   }
-   form.flat .form-group label{
-    margin-bottom: 3px;
-   }
-
-   @media (max-width: 575.98px) {
-        .carousel, .carousel-item{
-            height:200px!important;
-        }
-    }
-
-
-    @media (min-width: 576px) and (max-width: 767.98px) {
-        .carousel, .carousel-item{
-            height:200px!important;
-        }
-     }
-
-
-    @media (min-width: 768px) and (max-width: 991.98px) {  }
-
-
-    @media (min-width: 992px) and (max-width: 1199.98px) {
-        .carousel, .carousel-item{
-            height:500px;
-        }
-     }
-
-     @media (min-width: 1200px) {
-        .carousel, .carousel-item{
-            height:500px;
-        }
-    }
-
-    .carousel-caption h5,
-    .carousel-caption p {
-        background: #EB6864;
-        border-color: #EB6864;
-        color: #fff;
-        padding: 6px 10px;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
 @endpush
 
 @section('content')
@@ -82,7 +20,7 @@
                 <ol class="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                     @foreach($featured AS $feature)
-                    <li data-target="#carouselExampleIndicators" data-slide-to="{{ $loop->iteration }}"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="{{ $loop->iteration }}"></li>
                     @endforeach
                 </ol>
                 <div class="carousel-inner">
@@ -146,7 +84,7 @@
                 <div class="row">
                     @foreach($chunk AS $searchResult)
                         <div class="col-sm-6 col-md-4 mb-2">
-                            @include('components.attraction-showcase', ['item' => $searchResult])
+                            @include('components.attraction-showcase', ['item' => $searchResult, 'onMap' => true])
                         </div>
                     @endforeach
                 </div>
@@ -198,27 +136,67 @@
 @push('js')
 
 <script>
-    function getDefaultMapCenter() {
-        var defaultLat = 10.3157,
-            defaultLng =  123.8854;
-
-        return {
-            lat: defaultLat,
-            lng: defaultLng
-        }
-    }
     function initMap() {
 
-        var geocoder = new google.maps.Geocoder,
-            map = new google.maps.Map(document.getElementById('map'), {
+        var map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 10,
-                center: getDefaultMapCenter()
+                center: {
+                    lat: 10.31672,
+                    lng: 123.8907
+                },
+            }),
+            markerIcon = {
+                path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
+                fillColor: '#e25a00',
+                fillOpacity: 0.95,
+                scale: 3,
+                strokeColor: '#fff',
+                strokeWeight: 3,
+                anchor: new google.maps.Point(12, 24)
+            };
+
+        var attractions = $('.attraction');
+
+        if(attractions.length){
+            attractions.each(function (v, i) {
+                var coords = {
+                    lat: parseFloat($(this).data('latitude')),
+                    lng: parseFloat($(this).data('longitude'))
+                },
+                title = $(this).data('title'),
+                marker = new google.maps.Marker({
+                    position: coords,
+                    map: map,
+                    title: title,
+                    icon: markerIcon
+                }),
+                infoWindow = new google.maps.InfoWindow({
+                    maxWidth: 350,
+                    content: $(this)[0].outerHTML
+                });
+
+                marker.addListener('click', function() {
+                  infoWindow.open(map, marker);
+                });
+
+                google.maps.event.addListener(map, 'click', function() {
+                    infoWindow.close();
+                });
+
+                google.maps.event.addListener(infoWindow, 'domready', function() {
+                    var iwOuter = $('.gm-style-iw');
+                    var iwBackground = iwOuter.prev();
+
+    // Removes background shadow DIV
+                    iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+
+                    // Removes white background DIV
+                    iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+
+                });
             })
+        }
     }
-
-    jQuery(document).ready(function($) {
-
-    });
 </script>
  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBb9gjcZGig7KAgoJC1EmMHA98Rp8Ayz98&callback=initMap"></script>
 @endpush

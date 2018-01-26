@@ -89,6 +89,11 @@ class AttractionController extends CRUDController
         $model->photos->when($model->photos->count() < 5, function ($photos) use ($model) {
             $model->photos = $photos->pad(5, new Photo);
         });
+
+        $reviewStatus = in_array(request()->review_status, ['pending', 'approved', 'rejected']) ? request()->review_status : 'pending';
+        $model->load(['reviews' => function ($query) use ($reviewStatus) {
+            return $query->with('owner')->whereRatingStatus($reviewStatus);
+        }]);
         $this->beforeCreate();
     }
 
@@ -133,8 +138,9 @@ class AttractionController extends CRUDController
 
     public function beforeUpdate()
     {
-        if (is_null($this->storeFeatureBanner())) {
-            unset($this->validatedInput['feature_banner']);
+        $isFeatured = (int) request()->is_featured;
+        if (!is_null($banner = $this->storeFeatureBanner())) {
+            $this->validatedInput['feature_banner'] = $banner;
         }
     }
 }

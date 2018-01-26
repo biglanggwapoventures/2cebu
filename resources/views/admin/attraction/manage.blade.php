@@ -44,6 +44,9 @@
   <li>
     <a class="nav-link {{ $linkDisabled }}" id="photos-tab" data-toggle="tab" href="#photos" role="tab" aria-controls="photos">Photos</a>
   </li>
+  <li>
+    <a class="nav-link {{ $linkDisabled }}" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews">Reviews</a>
+  </li>
 </ul>
 <div class="tab-content mt-3" id="myTabContent">
   <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
@@ -282,6 +285,52 @@
         <button type="submit" class="btn btn-success">Save</button>
         {!! Form::close() !!}
     </div>
+    <div class="tab-pane" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+        {!! Form::open(['url' => url()->current().'#reviews', 'method' => 'get', 'class' => 'form-inline']) !!}
+            <div class="form-group">
+                <label for="">Filter review status</label>
+                {!! Form::select('review_status', ['pending' => 'Pending Approval', 'approved' => 'Approved', 'rejected' => 'Rejected'], null, ['class' => 'form-control ml-2']) !!}
+                <button type="submit" class="btn btn-info ml-2">Filter</button>
+            </div>
+        {!! Form::close() !!}
+        <table class="mt-2 table-sm table" >
+            <thead>
+                <tr>
+                    <th class="bg-success text-white">Owner</th>
+                    <th class="bg-success text-white">Rating</th>
+                    <th class="bg-success text-white">Review</th>
+                    <th class="bg-success text-white">Date Submitted</th>
+                    <th class="bg-success text-white"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($resourceData->reviews AS $review)
+                    <tr>
+                        <td>{{ $review->owner->fullname }}</td>
+                        <td>{{ $review->rating }}/5</td>
+                        <td>{!! $review->review ?: '<em class="text-danger">Empty</em>' !!}</td>
+                        <td>{{ date_create($review->created_at)->format('m/d/Y h:i A') }}</td>
+                        <td>
+                            {!! Form::open(['url' => route('review.set-status', ['id' => $review->id]), 'method' => 'patch']) !!}
+                            @if($review->is('pending'))
+                                <button type="button" class="btn btn-success btn-sm set-status" data-status-value="approved"><i class="fas fa-check"></i> Approve</button>
+                                <button type="button" class="btn btn-warning btn-sm set-status"  data-status-value="rejected"><i class="fas fa-times"></i> Reject</button>
+                            @elseif($review->is('approved'))
+                                <button type="button" class="btn btn-warning btn-sm set-status"  data-status-value="rejected"><i class="fas fa-times"></i> Reject</button>
+                            @elseif($review->is('rejected'))
+                                <button type="button" class="btn btn-success btn-sm set-status"  data-status-value="approved"><i class="fas fa-check"></i> Approve</button>
+                            @endif
+                            {!! Form::close() !!}
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center">No reviews with status: {{ ucfirst(request()->review_status) }}</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
 @endsection
 
@@ -302,6 +351,32 @@
             tags:true,
             allowClear:true
         });
+
+        $('.set-status').click(function () {
+            var $this = $(this),
+                origContent = $this.html();
+
+            $this.attr('disabled', 'disabled')
+                .html('<i class="fas fa-spinner fa-pulse"></i>');
+
+            $.ajax({
+                url: $this.closest('form').attr('action'),
+                method: 'PATCH',
+                data: {
+                    review_status: $this.data('status-value'),
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function () {
+                    $this.closest('tr').remove();
+                },
+                error: function () {
+                    window.alert('An unexpected error has occured');
+                },
+                complete: function () {
+                    $this.removeAttr('disabled').html(origContent);
+                }
+            })
+        })
 
         $('.photo-upload-placeholder').click(function () {
             var $this = $(this);
