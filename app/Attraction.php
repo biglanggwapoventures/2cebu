@@ -142,6 +142,11 @@ class Attraction extends Model
         return $this->reviews()->whereRatingStatus('approved');
     }
 
+    public function pendingReviews()
+    {
+        return $this->reviews()->whereRatingStatus('pending');
+    }
+
     public function getAverageRatingAttribute()
     {
         return $this->relationLoaded('approvedReviews') ? $this->approvedReviews->avg('rating') : 0;
@@ -214,5 +219,46 @@ class Attraction extends Model
             'approvedReviews',
             'likers',
         ]);
+    }
+
+    public function scopeWithTerm($query, $term)
+    {
+        return $query->where(function ($q) use ($term) {
+            $q->where('name', 'like', "%{$term}%")->orWhere('description', 'like', "%{$term}%");
+        })->orWhereHas('tags', function ($q) use ($term) {
+            $q->where('description', 'like', "%{$term}%");
+        });
+    }
+
+    public function scopeFeaturedFirst($query)
+    {
+        return $query->orderBy('is_featured', 'desc');
+    }
+
+    public function scopeNameLike($query, $value)
+    {
+        return $query->where('name', 'like', "%{$value}%");
+    }
+
+    public function scopeLocationLike($query, $value)
+    {
+        return $query->where('location', 'like', "%{$value}%");
+    }
+
+    public function scopeOfStatus($query, $value)
+    {
+        return $query->whereAttractionStatus($value);
+    }
+
+    public function scopeWithCategory($query, $categoryId)
+    {
+        return $query->whereHas('categories', function ($q) use ($categoryId) {
+            $q->where('attraction_categories.id', '=', $categoryId);
+        });
+    }
+
+    public function scopeWithPendingReviewsCount($query)
+    {
+        return $query->approved()->whereHas('pendingReviews')->withCount('pendingReviews');
     }
 }

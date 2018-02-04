@@ -40,6 +40,17 @@ class UserController extends CRUDController
         ];
     }
 
+    public function beforeIndex($query)
+    {
+        $request = request();
+
+        $query->when(($name = $request->name), function ($query) use ($name) {
+            return $query->whereRaw("CONCAT(firstname, ' ', lastname) LIKE '%{$name}%'");
+        })->when(($email = $request->email), function ($query) use ($email) {
+            return $query->where('email', '=', $email);
+        });
+    }
+
     public function beforeUpdate()
     {
         if (!trim(request()->password)) {

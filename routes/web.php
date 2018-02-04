@@ -25,7 +25,7 @@ Route::group(['as' => 'user.', 'namespace' => 'User', 'middleware' => 'auth', 'p
 Route::patch('review/{id}/status', 'User\ReviewController@setStatus')->name('review.set-status');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin'], function () {
-    Route::redirect('/', 'admin/user');
+    Route::get('/', 'DashboardController')->name('dashboard');
     Route::resource('user', 'UserController');
     Route::resource('attraction-category', 'AttractionCategoryController');
     Route::resource('attraction', 'AttractionController');

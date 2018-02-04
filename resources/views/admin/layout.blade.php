@@ -5,7 +5,7 @@
 
 @section('content')
 <nav class="navbar navbar-expand-lg navbar-dark bg-success fixed-top">
-  <a class="navbar-brand" href="#">{{ config('app.name') }} ADMIN</a>
+  <a class="navbar-brand" href="{{ route('admin.dashboard') }}">{{ config('app.name') }} ADMIN</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -29,11 +29,15 @@
         <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
           <ul class="nav nav-pills flex-column">
             <li class="nav-item">
+              <a class="nav-link {{ Route::is('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">Dashboard</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link {{ Route::is('admin.user.index') ? 'active' : '' }}" href="{{ route('admin.user.index') }}">Users </span></a>
             </li>
             <li class="nav-item">
               <a class="nav-link {{ Route::is('admin.attraction.index') ? 'active' : '' }}" href="{{ route('admin.attraction.index') }}">Attractions</a>
             </li>
+
           </ul>
            <ul class="nav nav-pills flex-column">
             <li class="nav-item">
@@ -49,7 +53,7 @@
                 <div class="col text-right">
                   @if(MyHelper::resourceMethodIn(['create', 'edit']))
                     <a href="{{ MyHelper::resource('index') }}" class="btn btn-primary"><i class="fas fa-chevron-left"></i> Back to list</a>
-                  @else
+                  @elseif(MyHelper::resourceMethodIn(['index']))
                     <a href="{{ MyHelper::resource('create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> New entry</a>
                   @endif
                 </div>

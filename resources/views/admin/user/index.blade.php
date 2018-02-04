@@ -1,7 +1,19 @@
 @extends('admin.layout')
 @section('title', 'Users')
 @section('body')
-<table class="table table-striped">
+{!! Form::open(['url' => url()->current(), 'method' => 'GET', 'class' => 'form-inline mb-2 mt-2']) !!}
+<div class="form-group">
+  <div class="form-group">
+    <label for="inputPassword2" class="ml-1">Name</label>
+    {!! Form::text('name', null, ['class' => 'form-control ml-1', '']) !!}
+  </div>
+  <div class="form-group">
+    <label for="inputPassword2" class="ml-1">Email</label>
+    {!! Form::text('email', null, ['class' => 'form-control ml-1', '']) !!}
+  </div>
+  <button type="submit" class="btn btn-danger ml-2">Search</button>
+{!! Form::close() !!}
+<table class="table table-striped mt-2">
     <thead>
         <tr>
             <th class="bg-success text-white">Full Name</th>

@@ -4,6 +4,7 @@ namespace App;
 
 use App\Attraction;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Rating extends Model
@@ -39,7 +40,7 @@ class Rating extends Model
 
     public function scopeApproved($query)
     {
-        return $this->whereRatingStatus('approved');
+        return $query->whereRatingStatus('approved');
     }
 
     public function is($status)
@@ -49,6 +50,12 @@ class Rating extends Model
 
     public function scopeGivenBy($query, $userId)
     {
-        return $this->whereUserId($userId);
+        return $query->whereUserId($userId);
+    }
+
+    public function isWeekOld()
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at, 'Asia/Manila')
+            ->diffInDays(Carbon::now('Asia/Manila')) >= 7;
     }
 }

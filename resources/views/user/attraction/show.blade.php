@@ -207,7 +207,7 @@
                     <div class="tab-pane" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                         <div class="row">
                             <div class="col-4">
-                                @if($myRating = $resourceData->reviews()->whereUserId(Auth::id())->first())
+                                @if(($myRating = auth()->user()->lastReview($resourceData)) && !$myRating->isWeekOld())
                                     <div class="form-group">
                                         <label for="" class="mb-0">Your rating</label>
                                         {!! Form::select('', ['1' => '1','2' => '2','3' => '3','4' => '4','5' => '5'], $myRating->rating, ['class' => 'rating-readonly']) !!}

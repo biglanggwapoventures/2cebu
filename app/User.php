@@ -80,4 +80,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Rating::class);
     }
+
+    public function lastReview(Attraction $attraction)
+    {
+        return $attraction->reviews()->givenBy($this->id)->latest()->first();
+    }
 }

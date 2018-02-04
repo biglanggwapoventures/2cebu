@@ -1,6 +1,7 @@
 @extends('admin.layout')
 @section('title', 'Users')
 @section('body')
+
 <table class="table table-striped">
     <thead class="thead-dark">
         <tr>

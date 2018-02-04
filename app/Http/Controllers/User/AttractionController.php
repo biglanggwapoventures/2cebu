@@ -40,6 +40,8 @@ class AttractionController extends CRUDController
                 'categories' => ['required', 'array'],
                 'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
                 'tags' => ['present', 'nullable', 'array'],
+                'budget_range_min' => ['required', 'numeric'],
+                'budget_range_max' => ['required', 'numeric'],
             ],
             'update' => [
                 'name' => ['required', Rule::unique($model->getTable())->ignore($request->route('attraction'))],
@@ -54,6 +56,8 @@ class AttractionController extends CRUDController
                 'categories' => ['required', 'array'],
                 'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
                 'tags' => ['present', 'nullable', 'array'],
+                'budget_range_min' => ['required', 'numeric'],
+                'budget_range_max' => ['required', 'numeric'],
             ],
         ];
     }

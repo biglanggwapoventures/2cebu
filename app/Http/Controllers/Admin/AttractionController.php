@@ -63,7 +63,28 @@ class AttractionController extends CRUDController
 
     public function beforeIndex($query)
     {
-        $query->with('owner');
+        request()->validate([
+            'name' => 'nullable',
+            'location' => 'nullable',
+            'category' => ['nullable'],
+            'status' => ['nullable', Rule::in(['pending', 'approved', 'rejected'])],
+        ]);
+
+        extract(request()->all(['name', 'location', 'category', 'status']));
+        // unset()
+
+        $query->when($name, function ($query) use ($name) {
+            $query->nameLike($name);
+        })->when($location, function ($query) use ($location) {
+            $query->locationLike($location);
+        })->when($category, function ($query) use ($category) {
+            $query->withCategory($category);
+        })->when($status, function ($query) use ($status) {
+            $query->ofStatus($status);
+        });
+
+        $this->viewData['categories'] = AttractionCategory::dropdownFormat();
+        $query->with('owner')->featuredFirst();
     }
 
     public function beforeCreate()

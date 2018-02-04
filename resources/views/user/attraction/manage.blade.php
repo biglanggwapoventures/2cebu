@@ -33,9 +33,13 @@
                 @php
                     $linkDisabled = is_null($resourceData->id) ? 'disabled' : '';
                 @endphp
-                 <h3 class="pb-3 position-sticky pt-2 bg-white w-100" style="border-bottom:2px solid #eee;top:0;z-index: 5">
-                    {{ $resourceData->id ? $resourceData->name : 'Submit new attraction' }}
-                     <small class="float-right"><a href="{{ MyHelper::resource('index') }}"><i class="fas fa-chevron-left"></i> Go back</a></small>
+                 <h3 class="pb-3 position-sticky pt-2 bg-white w-100 align-items-center row" style="top:0;z-index:10">
+                    <div class="col">
+                        {{ $resourceData->id ? $resourceData->name : 'Submit new attraction' }}
+                    </div>
+                    <div class="col text-right">
+                        <a href="{{ MyHelper::resource('index') }}" class="btn btn-primary"><i class="fas fa-chevron-left"></i> Go back</a>
+                    </div>
                 </h3>
 
                 <ul class="nav nav-tabs  mt-3" id="myTab" role="tablist">
@@ -57,9 +61,11 @@
                   <li>
                     <a class="nav-link {{ $linkDisabled }}" id="photos-tab" data-toggle="tab" href="#photos" role="tab" aria-controls="photos">Photos</a>
                   </li>
+                  @if(!$linkDisabled)
                   <li>
-                    <a class="nav-link {{ $linkDisabled }}" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews">Reviews</a>
+                    <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews">Reviews</a>
                   </li>
+                  @endif
                 </ul>
                 <div class="tab-content mt-3" id="myTabContent">
                   <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
@@ -334,7 +340,6 @@
 <script type="text/javascript" src="{{ asset('js/select2.full.min.js') }}"></script>
 <script type="text/javascript">
     jQuery(document).ready(function($) {
-
         $('.set-status').click(function () {
             var $this = $(this),
                 origContent = $this.html();
@@ -390,6 +395,13 @@
             $('img[data-idx='+$this.data('idx')+']').attr('src', defaultImage)
             $this.remove();
         })
+
+        @if($resourceData->is('approved'))
+            $('#details ').find('.form-control,select').prop('disabled', true);
+            $('#accomodations, #transpo, #activities, #delicacies').find('.form-control,button').prop('disabled', true);
+            $('#details, #accomodations, #transpo, #activities, #delicacies').find('[type=submit],hr').remove();
+            // $('#details, #accomodations, #transpo, #activities, #delicacies');)
+        @endif
     });
 </script>
 <script>

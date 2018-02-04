@@ -37,10 +37,9 @@ class HomeController extends Controller
         $attraction = Attraction::approved()->forShowcase();
 
         $attraction->when($request->q, function ($query) use ($request) {
-            $query->where(function ($query) use ($request) {
-                $query->where('name', 'like', "%{$request->q}%")->orWhere('description', 'like', "%{$request->q}%");
-            });
+            $query->withTerm($request->q);
         });
+
         $attraction->when($request->municipality, function ($query) use ($request) {
             $query->where('location', 'like', "%{$request->municipality}%");
         });
