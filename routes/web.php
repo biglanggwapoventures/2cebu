@@ -14,12 +14,15 @@ Route::group(['middleware' => 'guest', 'as' => 'guest.'], function () {
     });
 });
 
-Route::group(['as' => 'user.', 'namespace' => 'User', 'middleware' => 'auth', 'prefix' => 'user'], function () {
+Route::group(['as' => 'user.', 'namespace' => 'User', 'prefix' => 'user'], function () {
+    Route::group(['middleware' => 'auth'], function () {
+        Route::post('attraction/{attractionId}/review', 'ReviewController@submitReview')->name('review');
+        Route::post('attraction/like', 'LikeAttractionController')->name('attraction.like');
+        Route::get('profile', 'ProfileController')->name('profile');
+        Route::patch('profile', 'ProfileController@update')->name('profile.update');
+    });
+
     Route::resource('attraction', 'AttractionController');
-    Route::post('attraction/{attractionId}/review', 'ReviewController@submitReview')->name('review');
-    Route::post('attraction/like', 'LikeAttractionController')->name('attraction.like');
-    Route::get('profile', 'ProfileController')->name('profile');
-    Route::patch('profile', 'ProfileController@update')->name('profile.update');
 });
 
 Route::patch('review/{id}/status', 'User\ReviewController@setStatus')->name('review.set-status');

@@ -207,35 +207,41 @@
                     <div class="tab-pane" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                         <div class="row">
                             <div class="col-4">
-                                @if(($myRating = auth()->user()->lastReview($resourceData)) && !$myRating->isWeekOld())
-                                    <div class="form-group">
-                                        <label for="" class="mb-0">Your rating</label>
-                                        {!! Form::select('', ['1' => '1','2' => '2','3' => '3','4' => '4','5' => '5'], $myRating->rating, ['class' => 'rating-readonly']) !!}
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="" class="mb-0">Review</label>
-                                        <p class="form-control-static">
-                                            <strong>{!! $myRating->review ? $myRating->review : '<em >No review</em>' !!}</strong>
-                                        </p>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="" class="mb-0">Submitted at:</label>
-                                        <p class="form-control-static">
-                                            {!! date_create($myRating->created_at)->format('m/d/Y h:i A') !!}
-                                        </p>
-                                    </div>
-                                    <p class="text-primary">Thank you for your feedback! <i class="fas fa-smile"></i></p>
-
-                                @else
-                                    {!! Form::open(['url' => route('user.review', ['attractionId' => $resourceData->id]), 'method' => 'post', 'class' => 'ajax']) !!}
+                                @auth
+                                    @if(($myRating = auth()->user()->lastReview($resourceData)) && !$myRating->isWeekOld())
                                         <div class="form-group">
-                                            <label class="mb-0">Rate this attraction</label>
-                                            {!! Form::select('rating', ['1' => '1','2' => '2','3' => '3','4' => '4','5' => '5'], null, ['class' => 'rating']) !!}
+                                            <label for="" class="mb-0">Your rating</label>
+                                            {!! Form::select('', ['1' => '1','2' => '2','3' => '3','4' => '4','5' => '5'], $myRating->rating, ['class' => 'rating-readonly']) !!}
                                         </div>
-                                        {!! Form::bsTextarea('review', 'Give a feedback!', null, ['rows' => 3]) !!}
-                                        <button type="submit" class="btn btn-success">Submit your review!</button>
-                                    {!! Form::close() !!}
-                                @endif
+                                        <div class="form-group">
+                                            <label for="" class="mb-0">Review</label>
+                                            <p class="form-control-static">
+                                                <strong>{!! $myRating->review ? $myRating->review : '<em >No review</em>' !!}</strong>
+                                            </p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="mb-0">Submitted at:</label>
+                                            <p class="form-control-static">
+                                                {!! date_create($myRating->created_at)->format('m/d/Y h:i A') !!}
+                                            </p>
+                                        </div>
+                                        <p class="text-primary">Thank you for your feedback! <i class="fas fa-smile"></i></p>
+                                    @else
+                                        {!! Form::open(['url' => route('user.review', ['attractionId' => $resourceData->id]), 'method' => 'post', 'class' => 'ajax']) !!}
+                                            <div class="form-group">
+                                                <label class="mb-0">Rate this attraction</label>
+                                                {!! Form::select('rating', ['1' => '1','2' => '2','3' => '3','4' => '4','5' => '5'], null, ['class' => 'rating']) !!}
+                                            </div>
+                                            {!! Form::bsTextarea('review', 'Give a feedback!', null, ['rows' => 3]) !!}
+                                            <button type="submit" class="btn btn-success">Submit your review!</button>
+                                        {!! Form::close() !!}
+                                    @endif
+                                @endauth
+                                @guest
+                                    <p class="bg-danger p-2 text-center text-white">
+                                        You need to create an account to submit a review. Click <a class="text-info" href="#" data-toggle="modal" data-target="#register">here</a> to create one.
+                                    </p>
+                                @endguest
                             </div>
                             <div class="col">
                                 @forelse($resourceData->approvedReviews AS $review)

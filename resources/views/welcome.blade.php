@@ -30,7 +30,7 @@
                     @foreach($featured AS $feature)
                     <div class="carousel-item" style="background: url('{{ $feature->feature_banner  }}') center center;background-size: cover;background-repeat: no-repeat;">
                         <div class="carousel-caption d-none d-md-block">
-                            <h5 class="d-inline-block">{{ $feature->name }}</h5>
+                            <h5 class="d-inline-block"><a class="text-white" href="{{ route('user.attraction.show', ['id' => $feature->id]) }}">{{ $feature->name }}</a></h5>
                             <br>
                             <p class="d-inline-block">{{ $feature->location }}</p>
                           </div>

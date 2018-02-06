@@ -24,6 +24,7 @@ class AttractionController extends CRUDController
         AttractionCategory $category,
         Tag $tag
     ) {
+        $this->middleware('auth', ['except' => 'show']);
         parent::__construct();
         $this->resourceModel = $model;
         $this->validationRules = [

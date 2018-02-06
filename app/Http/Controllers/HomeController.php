@@ -49,7 +49,7 @@ class HomeController extends Controller
             });
         });
         $attraction->when($request->budget, function ($query) use ($request) {
-            $query->where('budget_range_max', '<=', "%{$request->budget}%");
+            $query->where('budget_range_max', '<=', $request->budget);
         });
 
         // $attraction->forShowcase()->paginate(6);

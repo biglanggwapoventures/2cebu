@@ -118,16 +118,6 @@ class AttractionController extends CRUDController
         $this->beforeCreate();
     }
 
-    private function storeFeatureBanner()
-    {
-        if ((int) request()->is_featured && request()->hasFile('feature_banner')) {
-            return request()->file('feature_banner')->store(
-                'photos/feature-banners', 'public'
-            );
-        }
-        return null;
-    }
-
     public function afterStore($attraction)
     {
         $attraction->categories()->attach(request()->categories);
@@ -159,9 +149,20 @@ class AttractionController extends CRUDController
 
     public function beforeUpdate()
     {
-        $isFeatured = (int) request()->is_featured;
-        if (!is_null($banner = $this->storeFeatureBanner())) {
-            $this->validatedInput['feature_banner'] = $banner;
+        if (!request()->is_featured) {
+            $this->validatedInput['is_featured'] = 0;
+        } elseif (request()->is_featured && ($requestBanner = $this->storeFeatureBanner())) {
+            $this->validatedInput['feature_banner'] = $requestBanner;
         }
+    }
+
+    private function storeFeatureBanner()
+    {
+        if ((int) request()->is_featured && request()->hasFile('feature_banner')) {
+            return request()->file('feature_banner')->store(
+                'photos/feature-banners', 'public'
+            );
+        }
+        return null;
     }
 }
