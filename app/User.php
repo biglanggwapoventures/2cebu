@@ -85,4 +85,14 @@ class User extends Authenticatable
     {
         return $attraction->reviews()->givenBy($this->id)->latest()->first();
     }
+
+    public function is($role)
+    {
+        return $role === $this->role;
+    }
+
+    public function isNot($role)
+    {
+        return !$this->is($role);
+    }
 }

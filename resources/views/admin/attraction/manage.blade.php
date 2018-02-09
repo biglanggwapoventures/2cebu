@@ -116,7 +116,7 @@
                     <th>Description</th>
                     <th>Minimum Rate</th>
                     <th>Max Rate</th>
-                    <th>Remarks</th>
+                    <th>Additional Information</th>
                     <th></th>
                 </tr>
             </thead>
@@ -153,7 +153,7 @@
         <table class="table dynamic">
             <thead>
                 <tr>
-                    <th>Description</th>
+                    <th>Vehicle</th>
                     <th>Start Point</th>
                     <th>End Point</th>
                     <th>Cost</th>
@@ -193,7 +193,7 @@
         <table class="table dynamic">
             <thead>
                 <tr>
-                    <th>Description</th>
+                    <th>Type Of Activity</th>
                     <th>Cost</th>
                     <th>Remarks</th>
                     <th></th>
@@ -231,9 +231,9 @@
         <table class="table dynamic">
             <thead>
                 <tr>
-                    <th>Description</th>
+                    <th>Name</th>
                     <th>Cost</th>
-                    <th>Remarks</th>
+                    <th>Description</th>
                     <th></th>
                 </tr>
             </thead>

@@ -28,11 +28,14 @@ Route::group(['as' => 'user.', 'namespace' => 'User', 'prefix' => 'user'], funct
 Route::patch('review/{id}/status', 'User\ReviewController@setStatus')->name('review.set-status');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin'], function () {
-    Route::get('/', 'DashboardController')->name('dashboard');
-    Route::resource('user', 'UserController');
-    Route::resource('attraction-category', 'AttractionCategoryController');
-    Route::resource('attraction', 'AttractionController');
-    Route::group(['prefix' => 'attraction/{attraction}', 'as' => 'attraction.'], function () {
+    Route::group(['middleware' => 'role:admin'], function () {
+        Route::get('/', 'DashboardController')->name('dashboard');
+        Route::resource('user', 'UserController');
+        Route::resource('attraction-category', 'AttractionCategoryController');
+        Route::resource('attraction', 'AttractionController');
+    });
+
+    Route::group(['prefix' => 'attraction/{attraction}', 'as' => 'attraction.', 'middleware' => 'auth'], function () {
         Route::patch('accomodation', 'AccomodationController@update')->name('accomodation.update');
         Route::patch('transportation', 'TransportationController@update')->name('transportation.update');
         Route::patch('delicacy', 'DelicacyController@update')->name('delicacy.update');
