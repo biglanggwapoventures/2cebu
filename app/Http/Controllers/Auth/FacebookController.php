@@ -49,7 +49,6 @@ class FacebookController extends Controller
                 'lastname' => $user->user['last_name'],
                 'gender' => strtolower($user->user['gender']),
                 'email' => $user->email,
-                'username' => $user->email,
                 'password' => Hash::make(str_random(6)),
                 'facebook_uid' => $user->id,
             ]);

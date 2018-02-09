@@ -41,7 +41,6 @@ class GoogleController extends Controller
                 'lastname' => $user->user['name']['familyName'],
                 'gender' => isset($user->user['gender']) ? strtolower($user->user['gender']) : null,
                 'email' => $user->email,
-                'username' => $user->email,
                 'password' => Hash::make(str_random(6)),
                 'google_uid' => $user->id,
             ]);
