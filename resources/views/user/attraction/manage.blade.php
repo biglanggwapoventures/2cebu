@@ -79,7 +79,7 @@
                             {!! Form::bsText('location', 'Location', null, ['id' => 'location']) !!}
                             <div class="row">
                                 <div class="col-sm-7">
-                                    {!! Form::bsSelect('categories[]', 'Category', $categoryList, null, ['class' => 'custom-select category  w-10 ', 'multiple' => true]) !!}
+                                    {!! Form::bsSelect('categories[]', 'Category', $categoryList, is_null($resourceData->id) ? [] : $resourceData->categories->pluck('description'), ['class' => 'custom-select category  w-10 ', 'multiple' => true]) !!}
                                     @if($errors->has('categories'))
                                         <small class="text-danger">{{ $errors->first('categories') }}</small>
                                     @endif
@@ -371,7 +371,7 @@
 
         $('.category').select2({
             placeholder: 'Select one or more category',
-
+            tags:true
         });
         $('.tags').select2({
             tags:true,

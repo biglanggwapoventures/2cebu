@@ -3,6 +3,8 @@
 @push('css')
 <link rel="stylesheet" href="{{ asset('css/jquery.fancybox.min.css') }}">
 <link rel="stylesheet" href="{{ asset('css/css-stars.css') }}">
+<link rel="stylesheet" href="{{ asset('fontawesome4/css/font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/fontawesome-stars-o.css') }}">
 
 <style>
     body{
@@ -20,6 +22,8 @@
    }
 </style>
 @endpush
+
+
 
 @section('content')
     @include('main-navbar')
@@ -40,13 +44,19 @@
                 {!! Form::hidden('latitude', $resourceData->latitude) !!}
                 <h3 class="pb-3 position-sticky pt-2 bg-white w-100" style="border-bottom:2px solid #eee;top:0;z-index: 5">
                     {{ $resourceData->name }}
-
-                    <br>
-                    <small>
-                        {{ $resourceData->location }}  <br>
-                        <small>
-                            Rating: <span class="badge badge-success badge-pill">{{ $resourceData->average_rating }} / 5 <i class="fas fa-star"></i></span></small>
+                    <small class="d-block mb-1">
+                        {{ $resourceData->location }}
                     </small>
+                    <div class="row align-content-center">
+                         <div class="col-1">
+                             <small class="text-success">[{{ $resourceData->average_rating }}]</small>
+                        </div>
+                        <div class="col-2">
+                            {!! Form::select('', ['1' => '1','2' => '2','3' => '3','4' => '4','5' => '5'], null, ['class' => 'average-rating', 'data-default' => $resourceData->average_rating]) !!}
+                        </div>
+
+                    </div>
+
                 </h3>
                 <dl class="row">
                     <dt class="col-sm-3">Category</dt>
@@ -209,23 +219,25 @@
                             <div class="col-4">
                                 @auth
                                     @if(($myRating = auth()->user()->lastReview($resourceData)) && !$myRating->isWeekOld())
-                                        <div class="form-group">
-                                            <label for="" class="mb-0">Your rating</label>
-                                            {!! Form::select('', ['1' => '1','2' => '2','3' => '3','4' => '4','5' => '5'], $myRating->rating, ['class' => 'rating-readonly']) !!}
+                                        <div class="card card-body">
+                                            <h4 class="card-tite">Your rating</h4>
+                                            <div class="form-group">
+                                                {!! Form::select('', ['1' => '1','2' => '2','3' => '3','4' => '4','5' => '5'], $myRating->rating, ['class' => 'rating-readonly']) !!}
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="mb-0">You wrote:</label>
+                                                <p class="form-control-static">
+                                                    <strong>{!! $myRating->review ? $myRating->review : '<em >No review</em>' !!}</strong>
+                                                </p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="" class="mb-0">Submitted at:</label>
+                                                <p class="form-control-static">
+                                                    {!! date_create($myRating->created_at)->format('m/d/Y h:i A') !!}
+                                                </p>
+                                            </div>
+                                            <p class="text-primary">Thank you for your feedback!</p>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="" class="mb-0">Review</label>
-                                            <p class="form-control-static">
-                                                <strong>{!! $myRating->review ? $myRating->review : '<em >No review</em>' !!}</strong>
-                                            </p>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="" class="mb-0">Submitted at:</label>
-                                            <p class="form-control-static">
-                                                {!! date_create($myRating->created_at)->format('m/d/Y h:i A') !!}
-                                            </p>
-                                        </div>
-                                        <p class="text-primary">Thank you for your feedback! <i class="fas fa-smile"></i></p>
                                     @else
                                         {!! Form::open(['url' => route('user.review', ['attractionId' => $resourceData->id]), 'method' => 'post', 'class' => 'ajax']) !!}
                                             <div class="form-group">
@@ -300,8 +312,13 @@
     }
 
     jQuery(document).ready(function($) {
+        $('.average-rating').barrating({
+            theme: 'fontawesome-stars-o',
+            initialRating: $('.average-rating').data('default'),
+            readonly: true,
+        });
         $('.rating').barrating({
-            theme: 'css-stars',
+            theme: 'css-stars'
         });
         $('.rating-readonly').barrating({
             theme: 'css-stars',

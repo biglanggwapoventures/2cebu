@@ -66,7 +66,7 @@
                 {!! Form::bsText('location', 'Location', null, ['id' => 'location']) !!}
                 {!! Form::hidden('longitude') !!}
                 {!! Form::hidden('latitude') !!}
-                {!! Form::bsSelect('categories[]', 'Category', $categoryList, null, ['class' => 'custom-select category ', 'multiple' => true]) !!}
+                {!! Form::bsSelect('categories[]', 'Category', $categoryList, is_null($resourceData->id) ? [] : $resourceData->categories->pluck('description'), ['class' => 'custom-select category ', 'multiple' => true]) !!}
                 @if($errors->has('categories'))
                     <small class="text-danger">{{ $errors->first('categories') }}</small>
                 @endif
@@ -344,8 +344,8 @@
 
         $('.category').select2({
             placeholder: 'Select one or more category',
-            allowClear:true
-
+            allowClear:true,
+            tags:true
         });
         $('.tags').select2({
             tags:true,

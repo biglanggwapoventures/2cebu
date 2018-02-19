@@ -39,6 +39,8 @@ class FacebookController extends Controller
 
         $registeredUser = null;
 
+        dd($user);
+
         $facebookUser = User::whereFacebookUid($user->id);
         if ($facebookUser->exists()) {
             $registeredUser = $facebookUser->first();

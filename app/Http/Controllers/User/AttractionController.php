@@ -39,7 +39,7 @@ class AttractionController extends CRUDController
                 // 'attraction_status' => ['required', Rule::in(['pending', 'approved', 'rejected'])],
                 'status_remarks' => ['sometimes'],
                 'categories' => ['required', 'array'],
-                'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
+                // 'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
                 'tags' => ['present', 'nullable', 'array'],
                 'budget_range_min' => ['required', 'numeric'],
                 'budget_range_max' => ['required', 'numeric'],
@@ -55,7 +55,7 @@ class AttractionController extends CRUDController
                 // 'attraction_status' => ['required', Rule::in(['pending', 'approved', 'rejected'])],
                 'status_remarks' => ['sometimes'],
                 'categories' => ['required', 'array'],
-                'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
+                // 'categories.*' => ['required', Rule::exists($category->getTable(), $category->getKeyName())],
                 'tags' => ['present', 'nullable', 'array'],
                 'budget_range_min' => ['required', 'numeric'],
                 'budget_range_max' => ['required', 'numeric'],
@@ -70,7 +70,7 @@ class AttractionController extends CRUDController
 
     public function beforeCreate()
     {
-        $this->viewData['categoryList'] = AttractionCategory::select('id', 'description')->pluck('description', 'id');
+        $this->viewData['categoryList'] = AttractionCategory::pluck('description', 'description');
         $this->viewData['tagList'] = Tag::pluck('description', 'description');
     }
 
@@ -102,22 +102,30 @@ class AttractionController extends CRUDController
 
     public function afterStore($attraction)
     {
-        $attraction->categories()->attach(request()->categories);
         $tags = collect(request()->tags)->map(function ($item) {
             $tag = Tag::firstOrCreate(['description' => $item]);
             return $tag->id;
         });
+        $categories = collect(request()->categories)->map(function ($item) {
+            $category = AttractionCategory::firstOrCreate(['description' => $item]);
+            return $category->id;
+        });
+        $attraction->categories()->attach($category);
         $attraction->tags()->attach($tags);
         Session::flash('growl', 'Attraction successfully added. You can now manage the accomodations, transportation and more details.');
     }
 
     public function afterUpdate($attraction)
     {
-        $attraction->categories()->sync(request()->categories);
         $tags = collect(request()->tags)->map(function ($item) {
             $tag = Tag::firstOrCreate(['description' => $item]);
             return $tag->id;
         });
+        $categories = collect(request()->categories)->map(function ($item) {
+            $category = AttractionCategory::firstOrCreate(['description' => $item]);
+            return $category->id;
+        });
+        $attraction->categories()->sync($categories);
         $attraction->tags()->sync($tags);
         Session::flash('growl', 'Attraction successfully updated');
     }
